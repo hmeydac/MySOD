@@ -1,5 +1,6 @@
 ﻿namespace MySOD.Core
 {
+    using System.Collections;
     using System.Collections.Generic;
 
     public class Backlog
@@ -11,9 +12,9 @@
             this.tasks.Add(task);
         }
 
-        public int TaskCount()
+        public int TaskCount
         {
-            return this.tasks.Count;
+            get { return this.tasks.Count; }
         }
 
         public WorkTask GetTask(int index)
@@ -24,6 +25,16 @@
         public void Remove(int index)
         {
             this.tasks.RemoveAt(index);
+        }
+
+        public List<WorkTask> GetList()
+        {
+            return this.tasks;
+        }
+
+        public void Replace(WorkTask toUpdateTask, int index)
+        {            
+            this.tasks[index] = toUpdateTask;
         }
     }
 }

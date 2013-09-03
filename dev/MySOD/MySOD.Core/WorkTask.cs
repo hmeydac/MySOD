@@ -2,24 +2,18 @@
 {
     public class WorkTask
     {
-        private bool isCompleted;
-
         public string Title { get; set; }
 
-        public string Description { get; set; }
-
-        public int Weight { get; set; }
-
-        public bool ForToday { get; set; }
-
-        public bool IsCompleted()
-        {
-            return this.isCompleted;
-        }
+        public bool IsCompleted { get; private set; }
 
         public void Complete()
         {
-            this.isCompleted = true;
+            this.IsCompleted = true;
+        }
+
+        public override string ToString()
+        {
+            return this.Title;
         }
     }
 }
