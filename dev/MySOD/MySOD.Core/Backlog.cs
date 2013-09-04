@@ -27,6 +27,11 @@
             this.tasks.RemoveAt(index);
         }
 
+        public void Remove(WorkTask task)
+        {
+            this.tasks.Remove(task);
+        }
+
         public List<WorkTask> GetList()
         {
             return this.tasks;
@@ -35,6 +40,11 @@
         public void Replace(WorkTask toUpdateTask, int index)
         {            
             this.tasks[index] = toUpdateTask;
+        }
+
+        public bool Contains(WorkTask task)
+        {
+            return this.tasks.Contains(task);
         }
     }
 }

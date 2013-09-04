@@ -1,10 +1,13 @@
-﻿using System.ComponentModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySOD.Core;
-using MySOD.UI.ViewModels;
-
-namespace MySOD.UI.Tests.ViewModels
+﻿namespace MySOD.UI.Tests.ViewModels
 {
+    using System.ComponentModel;
+    using System.Windows.Input;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using MySOD.Core;
+    using MySOD.UI.ViewModels;
+
     [TestClass]
     public class BacklogViewModelFixture
     {
@@ -27,18 +30,31 @@ namespace MySOD.UI.Tests.ViewModels
         }
 
         [TestMethod]
-        public void BacklogViewModelShouldNotifyPropertyChanged()
+        public void BacklogViewModelShouldHaveSelectedTask()
         {
             var viewModel = new BacklogViewModel(new Backlog());
+            Assert.IsNull(viewModel.SelectedTask);
             var propertyChangedName = string.Empty;
             viewModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
-                {
-                    propertyChangedName = e.PropertyName;
-                };
+            {
+                propertyChangedName = e.PropertyName;
+            };
 
-            viewModel.Title = "Change me";
-            
-            Assert.AreEqual("Title", propertyChangedName);
+            viewModel.SelectedTask = new WorkTask();
+            Assert.AreEqual("SelectedTask", propertyChangedName);
+            Assert.IsNotNull(viewModel.SelectedTask);
+        }
+
+        [TestMethod]
+        public void BacklogViewModelShouldHaveInitializedCommands()
+        {
+            var viewModel = new BacklogViewModel(new Backlog());
+            Assert.IsNotNull(viewModel.AddTaskCommand);
+            Assert.IsNotNull(viewModel.DeleteTaskCommand);
+            Assert.IsNotNull(viewModel.UpdateTaskCommand);
+            Assert.IsInstanceOfType(viewModel.AddTaskCommand, typeof(ICommand));
+            Assert.IsInstanceOfType(viewModel.DeleteTaskCommand, typeof(ICommand));
+            Assert.IsInstanceOfType(viewModel.UpdateTaskCommand, typeof(ICommand));
         }
     }
 }

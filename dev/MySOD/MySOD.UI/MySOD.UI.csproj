@@ -54,6 +54,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\AddTaskCommand.cs" />
+    <Compile Include="Commands\DeleteTaskCommand.cs" />
+    <Compile Include="Commands\UpdateTaskCommand.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\BacklogViewModel.cs" />
     <Page Include="MainWindow.xaml">

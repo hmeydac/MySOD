@@ -21,7 +21,7 @@
         {
             var backlog = new Backlog();
             var oldTask = new WorkTask() { Title = "Old Title" };
-            var newTask = new WorkTask() { Title= "New Title" };
+            var newTask = new WorkTask() { Title = "New Title" };
             backlog.Add(oldTask);
             backlog.Replace(newTask, 0);
             Assert.AreEqual(1, backlog.TaskCount);
@@ -44,7 +44,12 @@
             var backlog = new Backlog();
             var task = new WorkTask();
             backlog.Add(task);
+            Assert.AreEqual(1, backlog.TaskCount);
             backlog.Remove(0);
+            Assert.AreEqual(0, backlog.TaskCount);
+            backlog.Add(task);
+            Assert.AreEqual(1, backlog.TaskCount);
+            backlog.Remove(task);
             Assert.AreEqual(0, backlog.TaskCount);
         }
 
@@ -52,14 +57,15 @@
         public void AddMultipleTasksToBacklogShouldKeepSameOrder()
         {
             var backlog = new Backlog();
-            var expectedTasks = new List<WorkTask>{
+            var expectedTasks = new List<WorkTask>
+            {
                 new WorkTask(),
                 new WorkTask(),
                 new WorkTask()
             };
 
-            expectedTasks.ForEach(backlog.Add);            
-                        
+            expectedTasks.ForEach(backlog.Add);
+
             Assert.AreEqual(3, backlog.TaskCount);
             CollectionAssert.AreEqual(expectedTasks, backlog.GetList());
         }

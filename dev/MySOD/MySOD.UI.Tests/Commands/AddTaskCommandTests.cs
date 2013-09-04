@@ -1,14 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySOD.Core;
-using MySOD.UI.Commands;
-
-namespace MySOD.UI.Tests.Commands
+﻿namespace MySOD.UI.Tests.Commands
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using MySOD.Core;
+    using MySOD.UI.Commands;
+
     [TestClass]
     public class AddTaskCommandTests
     {
         [TestMethod]
-        public void AddTaskShouldAddTaskInBacklog()
+        public void ExecuteCommandShouldAddTaskInBacklog()
         {
             var backlog = new Backlog();
             var command = new AddTaskCommand(backlog);

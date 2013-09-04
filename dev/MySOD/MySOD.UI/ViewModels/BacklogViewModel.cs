@@ -1,27 +1,38 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using MySOD.Core;
-using MySOD.UI.Annotations;
-
-namespace MySOD.UI.ViewModels
+﻿namespace MySOD.UI.ViewModels
 {
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    using MySOD.Core;
+    using MySOD.UI.Annotations;
+    using MySOD.UI.Commands;
+
     public class BacklogViewModel : INotifyPropertyChanged
     {
         private readonly Backlog backlog;
         private string title;
 
+        private WorkTask selectedTask;
+
         public BacklogViewModel(Backlog backlog)
         {
             this.backlog = backlog;
+            this.AddTaskCommand = new AddTaskCommand(this.backlog);
+            this.DeleteTaskCommand = new DeleteTaskCommand(this.backlog);
+            this.UpdateTaskCommand = new UpdateTaskCommand();
         }
 
         public string Title
         {
-            get { return title; }
+            get
+            {
+                return this.title;
+            }
+
             set
             {
-                title = value;
+                this.title = value;
                 this.OnPropertyChanged();
             }
         }
@@ -29,6 +40,26 @@ namespace MySOD.UI.ViewModels
         public ObservableCollection<WorkTask> Tasks
         {
             get { return new ObservableCollection<WorkTask>(this.backlog.GetList()); }
+        }
+
+        public AddTaskCommand AddTaskCommand { get; set; }
+
+        public DeleteTaskCommand DeleteTaskCommand { get; set; }
+
+        public UpdateTaskCommand UpdateTaskCommand { get; set; }
+
+        public WorkTask SelectedTask
+        {
+            get
+            {
+                return this.selectedTask;
+            }
+
+            set
+            {
+                this.selectedTask = value;
+                this.OnPropertyChanged();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
