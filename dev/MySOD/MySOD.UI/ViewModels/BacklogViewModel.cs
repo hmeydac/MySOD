@@ -11,28 +11,31 @@
     public class BacklogViewModel : INotifyPropertyChanged
     {
         private readonly Backlog backlog;
-        private string title;
+        private string taskTitle;
 
         private WorkTask selectedTask;
 
         public BacklogViewModel(Backlog backlog)
         {
+            this.TaskTitle = string.Empty;
             this.backlog = backlog;
-            this.AddTaskCommand = new AddTaskCommand(this.backlog);
+            this.AddTaskCommand = new AddTaskCommand(this);
             this.DeleteTaskCommand = new DeleteTaskCommand(this.backlog);
             this.UpdateTaskCommand = new UpdateTaskCommand();
         }
 
-        public string Title
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string TaskTitle
         {
             get
             {
-                return this.title;
+                return this.taskTitle;
             }
 
             set
             {
-                this.title = value;
+                this.taskTitle = value;
                 this.OnPropertyChanged();
             }
         }
@@ -62,7 +65,12 @@
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void AddTaskInBacklog(string title)
+        {
+            var newTask = new WorkTask {Title = title};
+            this.Tasks.Add(newTask);
+            this.backlog.Add(newTask);
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

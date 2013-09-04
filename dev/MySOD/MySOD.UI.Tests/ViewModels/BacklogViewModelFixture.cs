@@ -16,8 +16,8 @@
         {
             var viewModel = new BacklogViewModel(new Backlog());
             const string Title = "Task Title";
-            viewModel.Title = Title;
-            Assert.AreEqual(Title, viewModel.Title);
+            viewModel.TaskTitle = Title;
+            Assert.AreEqual(Title, viewModel.TaskTitle);
         }
 
         [TestMethod]
