@@ -1,22 +1,26 @@
-﻿using System;
-using System.Windows.Input;
-
-namespace MySOD.UI.Commands
+﻿namespace MySOD.UI.Commands
 {
+    using System;
+    using System.Windows.Input;
+
     public abstract class BaseCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        public event EventHandler ExecuteCompleted;
+        public event EventHandler<CommandExecutionEventArgs> ExecuteCompleted;
 
         public abstract bool CanExecute(object parameter);
 
-        public virtual void Execute(object parameter)
+        public abstract void Execute(object parameter);
+
+        public void RaiseExecutionCompleted(object result)
         {
-            if (this.ExecuteCompleted != null)
+            if (this.ExecuteCompleted == null)
             {
-                this.ExecuteCompleted(this, new EventArgs());
+                throw new InvalidOperationException("Could not raise event Execution Completed as it was not no handled by the application.");
             }
+
+            this.ExecuteCompleted(this, new CommandExecutionEventArgs(result));
         }
     }
 }

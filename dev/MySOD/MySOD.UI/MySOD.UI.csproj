@@ -56,9 +56,6 @@
     <Compile Include="Commands\AddTaskCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\CommandExecutionEventArgs.cs" />
-    <Compile Include="Commands\DeleteTaskCommand.cs" />
-    <Compile Include="Commands\UpdateTaskCommand.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\BacklogViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

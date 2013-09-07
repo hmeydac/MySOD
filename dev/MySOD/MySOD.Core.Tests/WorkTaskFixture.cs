@@ -5,32 +5,44 @@
     [TestClass]
     public class WorkTaskFixture
     {
+        private WorkTask task;
+
+        const string Title = "My Title";
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            this.task = new WorkTask();
+        }
+
         [TestMethod]
         public void WorkTaskShouldHaveTitle()
         {
-            var task = new WorkTask();
-            const string Title = "My Title";
-            
             // Act
-            task.Title = Title;
+            this.task.Title = Title;
             
             // Assert
-            Assert.AreEqual(Title, task.Title);
+            Assert.AreEqual(Title, this.task.Title);
         }       
 
         [TestMethod]
         public void WorkTaskShouldHaveACompletionMark()
         {
-            var task = new WorkTask();
-            Assert.IsFalse(task.IsCompleted);
+            Assert.IsFalse(this.task.IsCompleted);
         }
 
         [TestMethod]
         public void CloseWorkTaskShouldMarkTaskAsCompleted()
         {
-            var task = new WorkTask();
-            task.Complete();
-            Assert.IsTrue(task.IsCompleted);
+            this.task.Complete();
+            Assert.IsTrue(this.task.IsCompleted);
+        }
+
+        [TestMethod]
+        public void ToStringMethodShouldReturnTaskTitle()
+        {
+            this.task.Title = Title;
+            Assert.AreEqual(Title, this.task.ToString());
         }
     }
 }

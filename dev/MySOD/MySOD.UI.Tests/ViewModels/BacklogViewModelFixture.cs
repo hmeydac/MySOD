@@ -1,5 +1,6 @@
 ﻿namespace MySOD.UI.Tests.ViewModels
 {
+    using System;
     using System.ComponentModel;
     using System.Windows.Input;
 
@@ -11,50 +12,68 @@
     [TestClass]
     public class BacklogViewModelFixture
     {
+        private BacklogViewModel viewModel;
+
+        private Backlog backlog;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            this.backlog = new Backlog();
+            this.viewModel = new BacklogViewModel(this.backlog);
+        }
+
         [TestMethod]
         public void BacklogViewModelShouldHaveTaskTitle()
         {
-            var viewModel = new BacklogViewModel(new Backlog());
             const string Title = "Task Title";
-            viewModel.TaskTitle = Title;
-            Assert.AreEqual(Title, viewModel.TaskTitle);
+            this.viewModel.TaskTitle = Title;
+            Assert.AreEqual(Title, this.viewModel.TaskTitle);
         }
 
         [TestMethod]
         public void BacklogViewModelShouldHaveTasks()
         {
-            var backlog = new Backlog();
-            backlog.Add(new WorkTask());
-            var viewModel = new BacklogViewModel(backlog);
-            CollectionAssert.AreEqual(backlog.GetList(), viewModel.Tasks);
+            this.backlog.Add(new WorkTask());
+            CollectionAssert.AreEqual(this.backlog.GetList(), this.viewModel.Tasks);
         }
 
         [TestMethod]
         public void BacklogViewModelShouldHaveSelectedTask()
         {
-            var viewModel = new BacklogViewModel(new Backlog());
-            Assert.IsNull(viewModel.SelectedTask);
+            Assert.IsNull(this.viewModel.SelectedTask);
             var propertyChangedName = string.Empty;
-            viewModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            this.viewModel.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
                 propertyChangedName = e.PropertyName;
             };
 
-            viewModel.SelectedTask = new WorkTask();
+            this.viewModel.SelectedTask = new WorkTask();
             Assert.AreEqual("SelectedTask", propertyChangedName);
-            Assert.IsNotNull(viewModel.SelectedTask);
+            Assert.IsNotNull(this.viewModel.SelectedTask);
         }
 
         [TestMethod]
         public void BacklogViewModelShouldHaveInitializedCommands()
         {
-            var viewModel = new BacklogViewModel(new Backlog());
-            Assert.IsNotNull(viewModel.AddTaskCommand);
-            Assert.IsNotNull(viewModel.DeleteTaskCommand);
-            Assert.IsNotNull(viewModel.UpdateTaskCommand);
-            Assert.IsInstanceOfType(viewModel.AddTaskCommand, typeof(ICommand));
-            Assert.IsInstanceOfType(viewModel.DeleteTaskCommand, typeof(ICommand));
-            Assert.IsInstanceOfType(viewModel.UpdateTaskCommand, typeof(ICommand));
+            Assert.IsNotNull(this.viewModel.AddTaskCommand);
+            Assert.IsInstanceOfType(this.viewModel.AddTaskCommand, typeof(ICommand));
+        }
+
+        [TestMethod]
+        public void AddTaskExecutionCompleteShouldAddTaskInBacklog()
+        {
+            Assert.AreEqual(0, this.backlog.TaskCount);
+            this.viewModel.AddTaskCommand.Execute("test");
+            Assert.AreEqual(1, this.backlog.TaskCount);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddTaskExecutionWithNoParameterShouldFail()
+        {
+            this.viewModel.AddTaskCommand.Execute(null);
+            Assert.Fail();
         }
     }
 }

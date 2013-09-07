@@ -2,10 +2,8 @@
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
 
     using MySOD.Core;
-    using MySOD.UI.Annotations;
     using MySOD.UI.Commands;
 
     public class BacklogViewModel : INotifyPropertyChanged
@@ -19,9 +17,8 @@
         {
             this.TaskTitle = string.Empty;
             this.backlog = backlog;
-            this.AddTaskCommand = new AddTaskCommand(this);
-            this.DeleteTaskCommand = new DeleteTaskCommand(this.backlog);
-            this.UpdateTaskCommand = new UpdateTaskCommand();
+            this.AddTaskCommand = new AddTaskCommand();
+            this.AddTaskCommand.ExecuteCompleted += this.AddTaskCommandExecuteCompleted;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,7 +33,7 @@
             set
             {
                 this.taskTitle = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("TaskTitle");
             }
         }
 
@@ -46,10 +43,6 @@
         }
 
         public AddTaskCommand AddTaskCommand { get; set; }
-
-        public DeleteTaskCommand DeleteTaskCommand { get; set; }
-
-        public UpdateTaskCommand UpdateTaskCommand { get; set; }
 
         public WorkTask SelectedTask
         {
@@ -61,22 +54,23 @@
             set
             {
                 this.selectedTask = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("SelectedTask");
             }
         }
 
-        public void AddTaskInBacklog(string title)
+        protected virtual void OnPropertyChanged(string propertyName = null)
         {
-            var newTask = new WorkTask {Title = title};
-            this.Tasks.Add(newTask);
-            this.backlog.Add(newTask);
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void AddTaskCommandExecuteCompleted(object sender, CommandExecutionEventArgs e)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            var task = (WorkTask)e.Result;
+            this.backlog.Add(task);
         }
     }
 }

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Windows.Input;
-using MySOD.Core;
-using MySOD.UI.ViewModels;
-
-namespace MySOD.UI.Commands
+﻿namespace MySOD.UI.Commands
 {
+    using System;
+
+    using MySOD.Core;
+
     public class AddTaskCommand : BaseCommand
     {
-        public AddTaskCommand(BacklogViewModel backlogViewModel)
-        {
-        }
-
-        public event EventHandler CanExecuteChanged;
-
         public override bool CanExecute(object parameter)
         {
             var taskName = parameter as string;
@@ -21,7 +14,13 @@ namespace MySOD.UI.Commands
 
         public override void Execute(object parameter)
         {
-            this.backlogViewModel.Tasks.Add(new WorkTask { Title = (string)parameter });
+            if (!this.CanExecute(parameter))
+            {
+                throw new ArgumentNullException("parameter");
+            }
+
+            var newTask = new WorkTask { Title = (string)parameter };
+            this.RaiseExecutionCompleted(newTask);
         }
     }
 }

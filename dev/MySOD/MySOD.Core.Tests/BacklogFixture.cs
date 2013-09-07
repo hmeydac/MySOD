@@ -14,6 +14,7 @@
 
             backlog.Add(task);
             Assert.AreEqual(1, backlog.TaskCount);
+            Assert.IsTrue(backlog.Contains(task));
         }
 
         [TestMethod]

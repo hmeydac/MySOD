@@ -1,43 +1,45 @@
-﻿using MySOD.UI.ViewModels;
-
-namespace MySOD.UI.Tests.Commands
+﻿namespace MySOD.UI.Tests.Commands
 {
+    using System;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Core;
     using UI.Commands;
 
     [TestClass]
     public class AddTaskCommandTests
     {
-        private Backlog backlog;
-        private BacklogViewModel backlogViewModel;
         private AddTaskCommand command;
 
         [TestInitialize]
         public void SetUp()
         {
-            this.backlog = new Backlog();
-            this.backlogViewModel = new BacklogViewModel(this.backlog);
-            this.command = new AddTaskCommand(this.backlogViewModel);
+            this.command = new AddTaskCommand();
         }
 
         [TestMethod]
-        public void ExecuteCommandShouldAddTaskInBacklog()
+        public void AddTaskShouldCallExecutionCompleted()
         {
-            command.CanExecute("New Task");
-            command.Execute("New Task");
-            Assert.AreEqual(1, backlog.TaskCount);
-            Assert.AreEqual("New Task", backlog.GetTask(0).Title);
+            var executionCompleted = false;
+            this.command.ExecuteCompleted += delegate { executionCompleted = true; };
+            this.command.Execute("Test");
+            Assert.IsTrue(executionCompleted);
         }
 
         [TestMethod]
-        public void ExecuteCommandShouldCleanCurrentTextFromViewModel()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddTaskExecuteWithNullShouldThrowException()
         {
-            this.backlogViewModel.TaskTitle = "New Task";
-            Assert.AreEqual("New Task", this.backlogViewModel.TaskTitle, "Command should read the Task Title parameter from ViewModel");
-            command.Execute("New Task");
-            Assert.AreEqual(string.Empty, this.backlogViewModel.TaskTitle, "BacklogViewModel should have an empty Task Title after executing command");
+            this.command.Execute(null);
+            Assert.Fail("Expected a NullArgumentException as no parameter was set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AddTaskExecuteWithoutEventHandlerShouldThrowException()
+        {
+            this.command.Execute("Test");
+            Assert.Fail("Expected a InvalidOperation Exception as no event handler was set.");
         }
     }
 }
