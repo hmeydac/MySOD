@@ -1,11 +1,18 @@
 namespace MySOD.Core
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class Commitment
     {
         internal Commitment(string text)
         {
+            this.Id = Guid.NewGuid();
             this.Text = text;
         }
+
+        [Key]
+        public Guid Id { get; set; }
 
         public string Text { get; set; }
 
