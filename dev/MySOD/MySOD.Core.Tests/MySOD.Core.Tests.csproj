@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B928706-8CD2-47C4-96A7-07CC65DAD473}</ProjectGuid>
+    <ProjectGuid>{5A7808BB-9626-4F27-AD59-33A1AEC1CE06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MySOD.Core.Tests</RootNamespace>
@@ -50,13 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BacklogFixture.cs" />
-    <Compile Include="WorkTaskFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MySOD.Core\MySOD.Core.csproj">
-      <Project>{518F1685-8BEA-4050-B629-9B4CA7D42263}</Project>
+      <Project>{7498f60b-785f-4a5a-8052-644540005e88}</Project>
       <Name>MySOD.Core</Name>
     </ProjectReference>
   </ItemGroup>
