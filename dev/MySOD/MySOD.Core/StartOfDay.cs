@@ -7,8 +7,8 @@
     public class StartOfDay : PersistanceEntity
     {
         public StartOfDay()
+            : this(DateTime.Now)
         {
-            
         }
 
         internal StartOfDay(DateTime date)
@@ -35,7 +35,9 @@
 
         public void RemoveCommitment(int index)
         {
-            this.Commitments.RemoveAt(index);
+            var commitment = this.Commitments[index];
+            this.Commitments.Remove(commitment);
+            this.RaiseRemovedEvent(commitment);
         }
     }
 }

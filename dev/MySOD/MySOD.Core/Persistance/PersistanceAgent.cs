@@ -15,7 +15,12 @@
             this.Entity = entity;
             this.DataSet = this.context.Set<TEntity>();
             this.Entity.EntityInserted += this.OnEntityInserted;
+            this.Entity.EntityRemoved += this.OnEntityRemoved;
         }
+
+        protected DbSet<TEntity> DataSet { get; set; }
+
+        protected PersistanceEntity Entity { get; set; }
 
         public IEnumerable<TEntity> Get()
         {
@@ -27,13 +32,15 @@
             return this.DataSet.Where(predicate).ToList();
         }
 
-        protected DbSet<TEntity> DataSet { get; set; }
-
-        protected PersistanceEntity Entity { get; set; }
-
         private void OnEntityInserted(object sender, PersistanceEventArgs e)
         {
             this.DataSet.Add((TEntity)e.Entity);
+            this.SaveChanges();
+        }
+
+        private void OnEntityRemoved(object sender, PersistanceEventArgs e)
+        {
+            this.DataSet.Remove((TEntity)e.Entity);
             this.SaveChanges();
         }
 

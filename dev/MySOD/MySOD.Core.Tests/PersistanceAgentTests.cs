@@ -8,16 +8,8 @@
     using MySOD.Core.Persistance;
 
     [TestClass]
-    public class PersistanceAgentTests
+    public class PersistanceAgentTests : TransactionalUnitTest
     {
-        private TransactionScope transactionScope;
-
-        [TestInitialize]
-        public void SetUp()
-        {
-            this.transactionScope = new TransactionScope();
-        }
-
         [TestMethod]
         public void OnStartOfDayInsertDetectedSaveInDatabase()
         {
@@ -27,10 +19,28 @@
             Assert.AreEqual(1, agent.Get().Count());
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        [TestMethod]
+        public void OnCommitmentInsertDetectedSaveInDatabase()
         {
-            this.transactionScope.Dispose();
+            var startOfDay = new StartOfDay();
+            var agent = new PersistanceAgent<Commitment>(startOfDay);
+            startOfDay.AddCommitment("Do tests");
+            Assert.AreEqual(1, agent.Get().Count());
+        }
+
+        [TestMethod]
+        public void OnCommitmentRemoveDetectedDeleteFromDatabase()
+        {
+            var startOfDay = new StartOfDay();
+            var agent = new PersistanceAgent<Commitment>(startOfDay);
+            startOfDay.AddCommitment("Do tests");
+            Assert.AreEqual(1, agent.Get().Count());
+            startOfDay.RemoveCommitment(0);
+            Assert.AreEqual(0, agent.Get().Count());
+        }
+
+        public override void SetUp()
+        {
         }
     }
 }

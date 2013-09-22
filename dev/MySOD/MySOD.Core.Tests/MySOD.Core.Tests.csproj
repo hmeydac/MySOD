@@ -59,6 +59,7 @@
     <Compile Include="AssemblyInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PersistanceAgentTests.cs" />
+    <Compile Include="TransactionalUnitTest.cs" />
     <Compile Include="UserTests.cs" />
   </ItemGroup>
   <ItemGroup>

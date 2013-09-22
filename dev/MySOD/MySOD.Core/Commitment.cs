@@ -5,7 +5,13 @@ namespace MySOD.Core
 
     public class Commitment
     {
-        internal Commitment(string text)
+        public Commitment()
+            : this(string.Empty)
+        {
+            
+        }
+
+        public Commitment(string text)
         {
             this.Id = Guid.NewGuid();
             this.Text = text;
